@@ -12,19 +12,27 @@ services:
   stock-api:
     image: 'ghcr.io/ozon-edu-csharp-2021/stock-api:main'
     hostname: stock_api
+    ports:
+      - "8081:81"
     depends_on:
       - supply_service
 
   supply-service:
     image: 'ghcr.io/ozon-edu-csharp-2021/supply-service:main'
     hostname: supply_service
+    ports:
+      - "8082:82"
     
   emailing-service:
     image: 'ghcr.io/ozon-edu-csharp-2021/emailing-service:main'
     hostname: emailing_service
+    ports:
+      - "8083:83"
 
   employees-service:
     image: 'ghcr.io/ozon-edu-csharp-2021/employees-service:main'
     hostname: employees_service
+    ports:
+      - "8084:84"
 
   

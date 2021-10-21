@@ -1,12 +1,12 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
-WORKDIR /src
+WORKDIR /main
 COPY ["src/Ozon.MerchandiseService/Ozon.MerchandiseService.csproj", "src/Ozon.MerchandiseService/"]
 RUN dotnet restore "src/Ozon.MerchandiseService/Ozon.MerchandiseService.csproj"
 
 COPY . .
 
-WORKDIR "/src/src/Ozon.MerchandiseService"
+WORKDIR "/main/src/Ozon.MerchandiseService"
 
 RUN dotnet build "Ozon.MerchandiseService.csproj" -c Realese -o /app/build
 
