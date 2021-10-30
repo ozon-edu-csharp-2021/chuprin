@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Ozon.MerchandiseService.Infrastructure.Filters;
+using Ozon.MerchandiseService.Infrastructure.Interceptors;
 using Ozon.MerchandiseService.Infrastructure.StartupFilters;
 
 namespace Ozon.MerchandiseService.Infrastructure.Extansions
@@ -16,7 +17,8 @@ namespace Ozon.MerchandiseService.Infrastructure.Extansions
         {
             builder.ConfigureServices(services =>
             {
-                services.AddGrpc();
+                services.AddGrpc(options=> options.Interceptors.Add<LoggingInterceptor>());
+                
                 services.AddControllers(options=>options.Filters.Add<GlobalExceptionFilter>());
                 
                 services.AddSingleton<IStartupFilter, TerminalStartupFilter>();

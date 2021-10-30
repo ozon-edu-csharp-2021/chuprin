@@ -48,10 +48,22 @@ namespace Ozon.MerchandiseService.Infrastructure.Middlewares
         {
             try
             {
-                _logger.LogInformation($"Request route: {context.Request.Path.Value ?? "empty"}");
+                StringBuilder st = new StringBuilder();
+                foreach (var variable in context.Request.Headers)
+                {
+                    st.Append($"{variable.Key}: {variable.Value}\n");
+                }
+                _logger.LogInformation($"Request header: {st}");
+
+                st.Clear();
+                foreach (var variable in context.Request.Query)
+                {
+                    st.Append($"{variable.Key}: {variable.Value}\n");
+                }
+                _logger.LogInformation($"Request query: {st}");
                 
                 long contentLength = context.Request.ContentLength ?? 0;
-                
+
                 if (contentLength > 0)
                 {
                     context.Request.EnableBuffering();

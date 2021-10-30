@@ -8,7 +8,7 @@ service MerchandiseGrpcApi{
   
   rpc RequestMerch(RequestMerchRequest) returns (BaseResponse);
   
-  rpc GetInfoIssuanceMerch(Int32BaseMessage) returns (InfoIssuanceMerchResponse);
+  rpc GetInfoIssuanceMerch(Int32BaseRequest) returns (InfoIssuanceMerchResponse);
   
 }
 
@@ -27,7 +27,7 @@ message RequestMerchRequest
   int32 quantity = 3;
 }
 
-message Int32BaseMessage
+message Int32BaseRequest
 {
   int32 id = 1;
 }

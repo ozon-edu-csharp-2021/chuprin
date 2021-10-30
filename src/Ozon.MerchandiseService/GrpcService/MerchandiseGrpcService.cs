@@ -31,7 +31,7 @@ namespace Ozon.MerchandiseService.GrpcService
             };
         }
 
-        public override async Task<InfoIssuanceMerchResponse> GetInfoIssuanceMerch(Int32BaseMessage request, ServerCallContext context)
+        public override async Task<InfoIssuanceMerchResponse> GetInfoIssuanceMerch(Int32BaseRequest request, ServerCallContext context)
         {
             var merch = await _merchService.GetInfoIssuanceMerchItem(request.Id, context.CancellationToken);
             return new InfoIssuanceMerchResponse()
