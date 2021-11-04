@@ -10,8 +10,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Ozon.MerchandiseService.Domain\Ozon.MerchandiseService.Domain.csproj" />
       <ProjectReference Include="..\Ozon.MerchandiseService.Grpc\Ozon.MerchandiseService.Grpc.csproj" />
       <ProjectReference Include="..\Ozon.MerchandiseService.HttpModels\Ozon.MerchandiseService.HttpModels.csproj" />
+      <ProjectReference Include="..\Ozon.MerchandiseService.Infrastructure\Ozon.MerchandiseService.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

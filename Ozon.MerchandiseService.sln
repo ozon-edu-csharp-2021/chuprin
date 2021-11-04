@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.MerchandiseService.Htt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.MerchandiseService.Grpc", "src\Ozon.MerchandiseService.Grpc\Ozon.MerchandiseService.Grpc.csproj", "{FA7D3FE0-2DD3-44AC-BF46-99DB8FD5EA1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.MerchandiseService.Domain", "src\Ozon.MerchandiseService.Domain\Ozon.MerchandiseService.Domain.csproj", "{214022C5-D48A-4E8B-A2C6-875E509021D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.MerchandiseService.Infrastructure", "src\Ozon.MerchandiseService.Infrastructure\Ozon.MerchandiseService.Infrastructure.csproj", "{EC1AF930-8C59-4C57-A00D-EBBB9E046225}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +34,8 @@ Global
 		{60C9C100-5FBB-4A8F-B0F8-5E69BEAD220A} = {217FD0C4-9CAC-40B1-9C47-C031E781E85D}
 		{D4B61594-F49E-4BD7-B087-282AFF0ADE04} = {217FD0C4-9CAC-40B1-9C47-C031E781E85D}
 		{FA7D3FE0-2DD3-44AC-BF46-99DB8FD5EA1D} = {217FD0C4-9CAC-40B1-9C47-C031E781E85D}
+		{214022C5-D48A-4E8B-A2C6-875E509021D5} = {217FD0C4-9CAC-40B1-9C47-C031E781E85D}
+		{EC1AF930-8C59-4C57-A00D-EBBB9E046225} = {217FD0C4-9CAC-40B1-9C47-C031E781E85D}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E3678ED8-4C89-44FE-842C-DEA944435D63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,5 +54,13 @@ Global
 		{FA7D3FE0-2DD3-44AC-BF46-99DB8FD5EA1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA7D3FE0-2DD3-44AC-BF46-99DB8FD5EA1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA7D3FE0-2DD3-44AC-BF46-99DB8FD5EA1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{214022C5-D48A-4E8B-A2C6-875E509021D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{214022C5-D48A-4E8B-A2C6-875E509021D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{214022C5-D48A-4E8B-A2C6-875E509021D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{214022C5-D48A-4E8B-A2C6-875E509021D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC1AF930-8C59-4C57-A00D-EBBB9E046225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC1AF930-8C59-4C57-A00D-EBBB9E046225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC1AF930-8C59-4C57-A00D-EBBB9E046225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC1AF930-8C59-4C57-A00D-EBBB9E046225}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

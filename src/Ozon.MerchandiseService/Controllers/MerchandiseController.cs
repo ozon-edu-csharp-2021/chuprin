@@ -12,7 +12,7 @@ using Ozon.MerchandiseService.Services.Interfaces;
 namespace Ozon.MerchandiseService.Controllers
 {
     [ApiController]
-    [Route("/api")]
+    [Route("/api/v1")]
     [Produces("application/json")]
     public class MerchandiseController: ControllerBase
     {
@@ -63,5 +63,6 @@ namespace Ozon.MerchandiseService.Controllers
             
             return response;
         }
+       
     }
 }
