@@ -9,7 +9,8 @@ namespace Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate
     {
         void Add(MerchIssue merchIssue);
         MerchIssue GetById(int id);
-        int Count();
-        void Save();
+        MerchIssue GetByEmployeeId(long employeeId);
+        List<MerchIssue> GetAll();
+        IDbContext UnitOfWork { get; }
     }
 }

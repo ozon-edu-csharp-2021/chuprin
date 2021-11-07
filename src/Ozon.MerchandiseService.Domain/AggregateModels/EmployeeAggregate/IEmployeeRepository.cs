@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Ozon.MerchandiseService.Domain.Seedwork;
 
 namespace Ozon.MerchandiseService.Domain.AggregateModels.EmployeeAggregate
 {
@@ -6,7 +7,6 @@ namespace Ozon.MerchandiseService.Domain.AggregateModels.EmployeeAggregate
     {
         void Add(Employee employee);
         Employee GetById(long id);
-        int Count();
-        void Save();
+        IDbContext UnitOfWork { get; }
     }
 }

@@ -5,29 +5,26 @@ using Ozon.MerchandiseService.Domain.AggregateModels.EmployeeAggregate;
 using Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate;
 using Ozon.MerchandiseService.GrpcService.FakeServices;
 using Ozon.MerchandiseService.GrpcService.FakeServices.EmailGrpc;
-using Ozon.MerchandiseService.Infrastructure.Commands;
 
-namespace Ozon.MerchandiseService.Infrastructure.Handlers
+namespace Ozon.MerchandiseService.Infrastructure.Application.Commands
 {
-    public class IssueMerchHandler: IRequestHandler<IssueMerchCommand, MerchIssue>
+    public class IssueMerchCommandHandler: IRequestHandler<IssueMerchCommand, MerchIssue>
     {
         private readonly IMerchIssueRepository _merchIssueRepository;
-        private readonly IEmployeeRepository _employeeRepository;
 
-        public IssueMerchHandler(IMerchIssueRepository merchIssueRepository, IEmployeeRepository employeeRepository)
+        public IssueMerchCommandHandler(IMerchIssueRepository merchIssueRepository)
         {
             _merchIssueRepository = merchIssueRepository;
-            _employeeRepository = employeeRepository;
         }
         public async Task<MerchIssue> Handle(IssueMerchCommand request, CancellationToken cancellationToken)
         {
-            var merchIssue = _merchIssueRepository.GetById(request.MerchIssueId);
+            var merchIssue = _merchIssueRepository.GetByEmployeeId(request.EmployeeId);
             
-            merchIssue.SetIssueStatus();
+            merchIssue.SetIssueStatus(new MerchType(){Value = MerchTypeEnum.From(request.MerchPackType)});
             
-            _merchIssueRepository.Save();
+            await _merchIssueRepository.UnitOfWork.Save();
 
-            return await Task.FromResult(merchIssue);
+            return merchIssue;
         }
     }
 }

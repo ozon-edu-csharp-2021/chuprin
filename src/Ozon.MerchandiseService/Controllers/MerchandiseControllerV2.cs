@@ -8,15 +8,16 @@ using Ozon.MerchandiseService.Domain.AggregateModels.EmployeeAggregate;
 using Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate;
 using Ozon.MerchandiseService.Grpc;
 using Ozon.MerchandiseService.HttpModels;
-using Ozon.MerchandiseService.Infrastructure.Commands;
+using Ozon.MerchandiseService.Infrastructure.Application.Commands;
 using Ozon.MerchandiseService.Models.CreationModels;
+using Ozon.MerchandiseService.Models.Factories;
 using Ozon.MerchandiseService.Services.Interfaces;
 
 namespace Ozon.MerchandiseService.Controllers
 {
-    [ApiController]
     [Route("/api/v2")]
-    [Produces("application/json")]
+    [Produces("application/json")]    
+    [ApiController]
     public class MerchandiseControllerV2: ControllerBase
     {
         private readonly IMediator _mediator;
@@ -31,41 +32,33 @@ namespace Ozon.MerchandiseService.Controllers
         /// <summary>
         /// Получить информацию о выдаче
         /// </summary>
-        [HttpGet]
         [Route("GetMerchIssueInfo/{id:int}")]
-        public async Task<MerchIssue> GetMerchIssue(int id, CancellationToken token)
+        [HttpGet]
+        public async Task<MerchIssueDto> GetMerchIssue(int id, CancellationToken token)
         {
-            return await Task.FromResult(_merchIssueRepository.GetById(id));
+            var merchIssue = _merchIssueRepository.GetById(id);
+            
+            return await Task.FromResult(MerchIssueDtoFactory.Create(merchIssue));
         }
         
         /// <summary>
         /// Выдать мерч по заявке
         /// </summary>
-        [HttpPost]
         [Route("RequestMerch")]
-        public async Task<MerchIssue> RequestMerch([FromBody]IssueMerchCommand requestMerchVM, CancellationToken token)
+        [HttpPost]
+        public async Task<MerchIssueDto> RequestMerch([FromBody]IssueMerchCommand requestMerchVM, CancellationToken token)
         {
             var result = await _mediator.Send(requestMerchVM);
 
-            return result;
+            return MerchIssueDtoFactory.Create(result);
         }
 
-        /// <summary>
-        /// Добавить новую заявку на мерч из Employee Service
-        /// </summary>
-        [HttpPost]
-        [Route("CreateNewIssueMerch")]
-        public async Task<MerchIssue> CreateNewIssueMerch([FromBody]CreateNewIssueMerchRequest request, CancellationToken token)
+        [Route("GetAll")]
+        [HttpGet]
+        public async Task<List<MerchIssueDto>> GetAll(CancellationToken token)
         {
-            var command = new CreateNewIssueMerchCommand()
-            {
-                EmployeeId = request.EmployeeId,
-                MerchType = request.MerchPack
-            };
-            
-            MerchIssue merchIssue = await _mediator.Send(command);
-
-            return merchIssue;
+            var dtos = MerchIssueDtoFactory.Create(_merchIssueRepository.GetAll());
+            return await Task.FromResult(dtos);
         }
     }
 }

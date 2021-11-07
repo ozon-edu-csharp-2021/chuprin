@@ -14,4 +14,9 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="GrpcService\FakeServices\InputGrpc" />
+      <Folder Include="GrpcService\FakeServices\OutputGrpc" />
+    </ItemGroup>
+
 </Project>

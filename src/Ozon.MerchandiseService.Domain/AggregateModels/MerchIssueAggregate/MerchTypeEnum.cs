@@ -1,4 +1,8 @@
-﻿using Ozon.MerchandiseService.Domain.SeedWork;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Ozon.MerchandiseService.Domain.Exceptions;
+using Ozon.MerchandiseService.Domain.SeedWork;
 using CommonEnums = CSharpCourse.Core.Lib.Enums;
 
 namespace Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate
@@ -13,6 +17,19 @@ namespace Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate
 
         public MerchTypeEnum(int id, string name) : base(id, name)
         {
+        }
+        public static IEnumerable<MerchTypeEnum> List() =>
+            new[] { WelcomePack,VeteranPack,ConferenceListenerPack,ConferenceSpeakerPack,ProbationPeriodEndingPack };
+        public static MerchTypeEnum From(int id)
+        {
+            var state = List().SingleOrDefault(s => s.Id == id);
+
+            if (state == null)
+            {
+                throw new MerchandiseDomainException($"Нет указанного типа MerchPack");
+            }
+
+            return state;
         }
     }
 }

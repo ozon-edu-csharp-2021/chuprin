@@ -9,7 +9,11 @@ namespace Ozon.MerchandiseService.Infrastructure
 {
     public class MerchIssueRepository: IMerchIssueRepository
     {
-        private readonly IDbContext _context;
+        public readonly IDbContext _context;
+        public IDbContext UnitOfWork
+        {
+            get { return _context; }
+        }
 
         public MerchIssueRepository(IDbContext context)
         {
@@ -21,24 +25,25 @@ namespace Ozon.MerchandiseService.Infrastructure
             _context.MerchIssues.Add(merchIssue);
         }
 
+        /*public MerchIssue GetIssueInfo(long employeeId, int merchPackType)
+        {
+            return _context.MerchIssues.FirstOrDefault(x =>
+                x.EmployeeId == employeeId && x.MerchPackType.Value.Id == merchPackType);
+        }*/
+
         public MerchIssue GetById(int id)
         {
             return _context.MerchIssues.FirstOrDefault(x => x.Id == id);
         }
 
-        public int Count()
+        public MerchIssue GetByEmployeeId(long employeeId)
         {
-            return _context.MerchIssues.Count;
+            return _context.MerchIssues.FirstOrDefault(x => x.EmployeeId == employeeId);
         }
 
         public List<MerchIssue> GetAll()
         {
             return _context.MerchIssues;
-        }
-
-        public void Save()
-        {
-            
         }
     }
 }

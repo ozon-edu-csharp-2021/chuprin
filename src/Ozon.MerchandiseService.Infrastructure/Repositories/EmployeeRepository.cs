@@ -9,7 +9,11 @@ namespace Ozon.MerchandiseService.Infrastructure
 {
     public class EmployeeRepository: IEmployeeRepository
     {
-        private readonly IDbContext _context;
+        public readonly IDbContext _context;
+        public IDbContext UnitOfWork
+        {
+            get { return _context; }
+        }
 
         public EmployeeRepository(IDbContext context)
         {
@@ -30,11 +34,6 @@ namespace Ozon.MerchandiseService.Infrastructure
         public int Count()
         {
             return _context.Employees.Count;
-        }
-
-        public void Save()
-        {
-            
         }
     }
 }

@@ -4,7 +4,6 @@ using MediatR;
 using Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate;
 using Ozon.MerchandiseService.Grpc;
 using Ozon.MerchandiseService.GrpcService.FakeServices;
-using Ozon.MerchandiseService.Infrastructure.Commands;
 
 namespace Ozon.MerchandiseService.GrpcService
 {

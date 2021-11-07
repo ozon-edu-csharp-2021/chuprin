@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ozon.MerchandiseService.Infrastructure.Commands;
 
 namespace Ozon.MerchandiseService.GrpcService.FakeServices
 {
+    /// <summary>
+    /// Используется для симуляции Stock Api (только входящие в него вызовы)
+    /// </summary>
     public class StockGrpcFakeService
     {
         //Остаток каждого MerchPack на складе
-        private Dictionary<int, int> _availabilittyMerchPacks = new Dictionary<int, int>()
+        public static Dictionary<int, int> AvailabilittyMerchPacks = new Dictionary<int, int>()
         {
             {1, 0},
             {2, 1},
@@ -23,7 +25,13 @@ namespace Ozon.MerchandiseService.GrpcService.FakeServices
         /// </summary>
         public bool IssueMerchRequest(IssueMerchRequest request)
         {
-            return _availabilittyMerchPacks[request.MerchPackType] > 0;
+            if (AvailabilittyMerchPacks[request.MerchPackType] > 0)
+            {
+                AvailabilittyMerchPacks[request.MerchPackType] -= 1;
+                return true;
+            }
+
+            return false;
         }
     }
 

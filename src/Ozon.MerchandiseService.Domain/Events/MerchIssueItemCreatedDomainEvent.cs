@@ -3,11 +3,11 @@ using Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate;
 
 namespace Ozon.MerchandiseService.Domain.Events
 {
-    public class MerchIssueStatusChangedToPendindDomainEvent: INotification
+    public class MerchIssueItemCreatedDomainEvent: INotification    
     {
         public MerchIssue MerchIssue { get; }
         public MerchType MerchType { get; }
-        public MerchIssueStatusChangedToPendindDomainEvent(MerchIssue merchIssue, MerchType merchType)
+        public MerchIssueItemCreatedDomainEvent(MerchIssue merchIssue, MerchType merchType)
         {
             MerchIssue = merchIssue;
             MerchType = merchType;

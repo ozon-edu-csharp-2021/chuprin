@@ -1,5 +1,9 @@
-﻿using Ozon.MerchandiseService.Domain.AggregateModels.EmployeeAggregate;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Ozon.MerchandiseService.Domain.AggregateModels.EmployeeAggregate;
 using Ozon.MerchandiseService.Domain.Events;
+using Ozon.MerchandiseService.Domain.Exceptions;
 using Ozon.MerchandiseService.Domain.Seedwork;
 using Ozon.MerchandiseService.Domain.SeedWork;
 
@@ -7,51 +11,104 @@ namespace Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate
 {
     public class MerchIssue : Entity, IAggregateRoot
     {
-        public Employee Employee { get; private set; }
-        public MerchType MerchPackType { get; private set; }
-        public IssueStatusEnum IssueStatus { get; private set; }
+        private static int _merchIssuesCount = 1;
+        
+        public  long EmployeeId => _employeeId;
+        private long _employeeId;
 
-        public MerchIssue(int id, Employee employee, MerchType merchPackType, IssueStatusEnum issueStatus)
+        public IReadOnlyCollection<MerchIssueItem> MerchIssueItems => _merchIssueItems;
+        private readonly List<MerchIssueItem> _merchIssueItems;
+        
+        public MerchIssue(long employeeId)
         {
-            Id = id;
-            Employee = employee;
-            MerchPackType = merchPackType;
-            IssueStatus = issueStatus;
+            Id = _merchIssuesCount++;
+            _employeeId = employeeId;
+            _merchIssueItems = new List<MerchIssueItem>();
         }
         
-        public MerchIssue(int id, Employee employee, MerchType merchPackType)
+        public void AddMerchIssueItem(MerchType merchPackType, DateTime dateCreated)
         {
-            Id = id;
-            Employee = employee;
-            MerchPackType = merchPackType;
-            IssueStatus = IssueStatusEnum.Created;
+            var merchIssue = _merchIssueItems.FirstOrDefault(x => x.MerchPackType.Value.Id == merchPackType.Value.Id);
+            
+            if (merchIssue != null)
+                throw new MerchandiseDomainException("Данный мерч уже был выдан сотруднику!");
+
+            var newMerchIssueItem = new MerchIssueItem(merchPackType, dateCreated);
+            _merchIssueItems.Add(newMerchIssueItem);
+            AddMerchIssueItemCreatedDomainEvent(this, merchPackType);
         }
 
-        public void SetInQueueStatus()
+        public void SetInQueueStatus(MerchType merchType)
         {
-            if (IssueStatus.Id == IssueStatusEnum.Created.Id)
-            {
-                IssueStatus = IssueStatusEnum.InQueue;
-                AddDomainEvent(new MerchIssueStatusChangedToInQueueDomainEvent(Id));
-            }
+            var merchIssueItem = GetMerchIssueItem(merchType);
+            if(merchIssueItem == null)
+                NotFoundMerchIssueItemWhenChangingStatusException(IssueStatusEnum.InQueue);
+            
+            if (merchIssueItem.IssueStatus.Id != IssueStatusEnum.IsCreated.Id)
+                StatusChangeException(merchIssueItem.IssueStatus,IssueStatusEnum.InQueue);
+            
+            merchIssueItem.SetStatus(IssueStatusEnum.InQueue);
         }
 
-        public void SetPendingStatus()
+        public void SetPendingStatus(MerchType merchType)
         {
-            if (IssueStatus.Id == IssueStatusEnum.Created.Id)
-            {
-                IssueStatus = IssueStatusEnum.PendingIssue;
-                AddDomainEvent(new MerchIssueStatusChangedToPendindDomainEvent(Id));
-            }
+            var merchIssueItem = GetMerchIssueItem(merchType);
+            if (merchIssueItem == null)
+                NotFoundMerchIssueItemWhenChangingStatusException(IssueStatusEnum.IsPending);
+
+            if (merchIssueItem.IssueStatus.Id != IssueStatusEnum.InQueue.Id && merchIssueItem.IssueStatus.Id != IssueStatusEnum.IsCreated.Id)
+                StatusChangeException(merchIssueItem.IssueStatus, IssueStatusEnum.IsPending);
+
+            merchIssueItem.SetStatus(IssueStatusEnum.IsPending);
+            AddMerchIssueItemChangedToPendingDomainEvent(merchType);
         }
 
-        public void SetIssueStatus()
+        public void SetIssueStatus(MerchType merchType)
         {
-            if (IssueStatus.Id == IssueStatusEnum.PendingIssue.Id)
-            {
-                IssueStatus = IssueStatusEnum.Issued;
-                AddDomainEvent(new MerchIssueStatusChangedToIssueDomainEvent(Id));
-            }
+            var merchIssueItem = GetMerchIssueItem(merchType);
+            if(merchIssueItem == null)
+                NotFoundMerchIssueItemWhenChangingStatusException(IssueStatusEnum.IsIssued);
+            
+            if (merchIssueItem.IssueStatus.Id != IssueStatusEnum.IsPending.Id)
+                StatusChangeException(merchIssueItem.IssueStatus,IssueStatusEnum.IsIssued);
+
+            merchIssueItem.SetStatus(IssueStatusEnum.IsIssued);
         }
+        
+        private MerchIssueItem GetMerchIssueItem(MerchType merchType)
+        {
+            var merchIssueItem = _merchIssueItems.FirstOrDefault(x => x.MerchPackType.Value.Id == merchType.Value.Id);
+
+            return merchIssueItem;
+        }
+
+        #region DomainEvents
+
+        private void AddMerchIssueItemChangedToPendingDomainEvent(MerchType merchType)
+        {
+            var merchIssueStatusChangedToPendindDomainEvent = new MerchIssueStatusChangedToPendindDomainEvent(this, merchType);
+            this.AddDomainEvent(merchIssueStatusChangedToPendindDomainEvent);
+        }
+        private void AddMerchIssueItemCreatedDomainEvent(MerchIssue merchIssue, MerchType merchType)
+        {
+            var merchIssueItemCreated = new MerchIssueItemCreatedDomainEvent(merchIssue, merchType);
+
+            this.AddDomainEvent(merchIssueItemCreated);
+        }
+
+        #endregion
+
+        #region Exceptions
+
+        private void NotFoundMerchIssueItemWhenChangingStatusException(IssueStatusEnum status)
+        {
+            throw new MerchandiseDomainException($"Не удалось установить статус {status.Name}. Данный MerchIssueItem не найден.");
+        }
+        private void StatusChangeException(IssueStatusEnum oldStatus, IssueStatusEnum newStatus)
+        {
+            throw new MerchandiseDomainException($"Невозможно изменить статус с {oldStatus.Name} на {newStatus.Name}.");
+        }
+
+        #endregion
     }
 }
