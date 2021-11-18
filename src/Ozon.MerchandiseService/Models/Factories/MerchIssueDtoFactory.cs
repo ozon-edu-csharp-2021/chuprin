@@ -7,7 +7,7 @@ namespace Ozon.MerchandiseService.Models.Factories
 {
     public class MerchIssueDtoFactory
     {
-        public static List<MerchIssueDto> Create(List<MerchIssue> merchIssues)
+        public static IReadOnlyCollection<MerchIssueDto> Create(IReadOnlyCollection<MerchIssue> merchIssues)
         {
             if (merchIssues == null)
                 return null;

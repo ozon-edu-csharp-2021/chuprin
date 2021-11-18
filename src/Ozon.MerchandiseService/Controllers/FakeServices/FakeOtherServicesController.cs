@@ -28,7 +28,7 @@ namespace Ozon.MerchandiseService.Controllers.FakeServices
         /// </summary>
         [HttpPost]
         [Route("/SupplyService/NewSupply")]
-        public async Task<List<MerchIssueDto>> NewSupply([FromBody]NewSupplyRequest request, CancellationToken token)
+        public async Task<IReadOnlyCollection<MerchIssueDto>> NewSupply([FromBody]NewSupplyRequest request, CancellationToken token)
         {
             //Обновим количество на складе (работа самого StockApi)
             foreach (var merchSupply in request.MerchSupplies)

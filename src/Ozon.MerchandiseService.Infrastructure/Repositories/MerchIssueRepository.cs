@@ -5,7 +5,7 @@ using Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate;
 using Ozon.MerchandiseService.Domain.Seedwork;
 using Ozon.MerchandiseService.Infrastructure.Repositories;
 
-namespace Ozon.MerchandiseService.Infrastructure
+namespace Ozon.MerchandiseService.Infrastructure.Repositories
 {
     public class MerchIssueRepository: IMerchIssueRepository
     {
@@ -24,12 +24,6 @@ namespace Ozon.MerchandiseService.Infrastructure
         {
             _context.MerchIssues.Add(merchIssue);
         }
-
-        /*public MerchIssue GetIssueInfo(long employeeId, int merchPackType)
-        {
-            return _context.MerchIssues.FirstOrDefault(x =>
-                x.EmployeeId == employeeId && x.MerchPackType.Value.Id == merchPackType);
-        }*/
 
         public MerchIssue GetById(int id)
         {

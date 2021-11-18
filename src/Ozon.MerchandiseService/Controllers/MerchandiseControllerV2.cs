@@ -21,12 +21,10 @@ namespace Ozon.MerchandiseService.Controllers
     public class MerchandiseControllerV2: ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMerchIssueRepository _merchIssueRepository;
        
-        public MerchandiseControllerV2(IMediator mediator, IMerchIssueRepository merchIssueRepository)
+        public MerchandiseControllerV2(IMediator mediator)
         {
             _mediator = mediator;
-            _merchIssueRepository = merchIssueRepository;
         }
 
         /// <summary>
@@ -34,9 +32,9 @@ namespace Ozon.MerchandiseService.Controllers
         /// </summary>
         [Route("GetMerchIssueInfo/{id:int}")]
         [HttpGet]
-        public async Task<MerchIssueDto> GetMerchIssue(int id, CancellationToken token)
+        public async Task<MerchIssueDto> GetMerchIssue([FromBody]GetIssueByIdCommand getEmployeeRequest, CancellationToken token)
         {
-            var merchIssue = _merchIssueRepository.GetById(id);
+            var merchIssue = await _mediator.Send(getEmployeeRequest, token);
             
             return await Task.FromResult(MerchIssueDtoFactory.Create(merchIssue));
         }
@@ -46,18 +44,21 @@ namespace Ozon.MerchandiseService.Controllers
         /// </summary>
         [Route("RequestMerch")]
         [HttpPost]
-        public async Task<MerchIssueDto> RequestMerch([FromBody]IssueMerchCommand requestMerchVM, CancellationToken token)
+        public async Task<MerchIssueDto> RequestMerch([FromBody]IssueMerchCommand requestMerchIssue, CancellationToken token)
         {
-            var result = await _mediator.Send(requestMerchVM);
+            var result = await _mediator.Send(requestMerchIssue, token);
 
             return MerchIssueDtoFactory.Create(result);
         }
 
         [Route("GetAll")]
         [HttpGet]
-        public async Task<List<MerchIssueDto>> GetAll(CancellationToken token)
+        public async Task<IReadOnlyCollection<MerchIssueDto>> GetAll(CancellationToken token)
         {
-            var dtos = MerchIssueDtoFactory.Create(_merchIssueRepository.GetAll());
+            var merchIssues = await _mediator.Send(new GetAllMerchIssuesCommand(), token);
+
+            var dtos = MerchIssueDtoFactory.Create(merchIssues);
+
             return await Task.FromResult(dtos);
         }
     }

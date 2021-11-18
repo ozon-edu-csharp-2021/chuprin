@@ -5,7 +5,7 @@ using Ozon.MerchandiseService.Domain.AggregateModels.EmployeeAggregate;
 using Ozon.MerchandiseService.Domain.Seedwork;
 using Ozon.MerchandiseService.Infrastructure.Repositories;
 
-namespace Ozon.MerchandiseService.Infrastructure
+namespace Ozon.MerchandiseService.Infrastructure.Repositories
 {
     public class EmployeeRepository: IEmployeeRepository
     {
