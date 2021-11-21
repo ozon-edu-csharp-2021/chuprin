@@ -11,11 +11,13 @@ namespace Ozon.MerchandiseService.Infrastructure.Application.Commands
 {
     public class ProcessNewSupplyCommandHandler: IRequestHandler<ProcessNewSupplyCommand, List<MerchIssue>>
     {
+        private readonly IMerchIssueRepository _merchIssueRepository;
         private readonly IMerchIssueItemQueries _merchIssueItemQueries;
 
-        public ProcessNewSupplyCommandHandler(IMerchIssueItemQueries merchIssueItemQueries)
+        public ProcessNewSupplyCommandHandler(IMerchIssueItemQueries merchIssueItemQueries, IMerchIssueRepository merchIssueRepository)
         {
             _merchIssueItemQueries = merchIssueItemQueries;
+            _merchIssueRepository = merchIssueRepository;
         }
 
         public async Task<List<MerchIssue>> Handle(ProcessNewSupplyCommand request, CancellationToken cancellationToken)
@@ -27,8 +29,9 @@ namespace Ozon.MerchandiseService.Infrastructure.Application.Commands
             {
                 var merchType = new MerchType() {Value = MerchTypeEnum.From(merchPackSupply.MerchPackType)};
                 
-                var merchIssuesInQueue = _merchIssueItemQueries.GetMerchIssueItemWithStatus(IssueStatusEnum.InQueue,
+                var merchIssuesInQueue = await _merchIssueItemQueries.GetMerchIssueItemWithStatus(IssueStatusEnum.InQueue,
                     merchType,
+                    cancellationToken,
                     merchPackSupply.Quantity);
 
                 foreach (var merchIssue in merchIssuesInQueue)
@@ -37,7 +40,7 @@ namespace Ozon.MerchandiseService.Infrastructure.Application.Commands
                         {MerchPackType = merchPackSupply.MerchPackType}))
                     {
                         merchIssue.SetPendingStatus(merchType);
-                        
+                        await _merchIssueRepository.Update(merchIssue, cancellationToken);
                         
                         if(pendingMerchIssues.FirstOrDefault(x=>x.EmployeeId == merchIssue.EmployeeId) == null)
                             pendingMerchIssues.Add(merchIssue);

@@ -14,6 +14,7 @@
       <ProjectReference Include="..\Ozon.MerchandiseService.Grpc\Ozon.MerchandiseService.Grpc.csproj" />
       <ProjectReference Include="..\Ozon.MerchandiseService.HttpModels\Ozon.MerchandiseService.HttpModels.csproj" />
       <ProjectReference Include="..\Ozon.MerchandiseService.Infrastructure\Ozon.MerchandiseService.Infrastructure.csproj" />
+      <ProjectReference Include="..\Ozon.MerchandiseService.Migrator\Ozon.MerchandiseService.Migrator.csproj" />
     </ItemGroup>
 
 </Project>

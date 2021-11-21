@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate;
 
 namespace Ozon.MerchandiseService.Infrastructure.Application.Queries
@@ -13,11 +15,11 @@ namespace Ozon.MerchandiseService.Infrastructure.Application.Queries
             _merchIssueRepository = merchIssueRepository;
         }
 
-        public List<MerchIssue> GetMerchIssueItemWithStatus(IssueStatusEnum status, MerchType merchType, int quantityRecords = 1)
+        public async Task<List<MerchIssue>> GetMerchIssueItemWithStatus(IssueStatusEnum status, MerchType merchType,CancellationToken token, int quantityRecords = 1)
         {
             List<MerchIssue> result = new List<MerchIssue>();
             
-            var merchIssues = _merchIssueRepository.GetAll();
+            var merchIssues = await _merchIssueRepository.GetAll(token);
             foreach (var merchIssue in merchIssues)
             {
                 if (merchIssue.MerchIssueItems

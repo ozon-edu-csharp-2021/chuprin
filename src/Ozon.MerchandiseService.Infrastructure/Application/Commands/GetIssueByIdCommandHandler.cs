@@ -20,9 +20,7 @@ namespace Ozon.MerchandiseService.Infrastructure.Application.Commands
 
         public async Task<MerchIssue> Handle(GetIssueByIdCommand request, CancellationToken cancellationToken)
         {
-            var result = _merchIssueRepository.GetById(request.Id);
-
-            return await Task.FromResult(result);
+            return await _merchIssueRepository.GetById(request.Id, cancellationToken);
         }
     }
 }

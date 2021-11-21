@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ozon.MerchandiseService.Domain.Seedwork;
 
 namespace Ozon.MerchandiseService.Infrastructure.Application.Commands
 {
@@ -20,9 +21,7 @@ namespace Ozon.MerchandiseService.Infrastructure.Application.Commands
 
         public async Task<IReadOnlyCollection<MerchIssue>> Handle(GetAllMerchIssuesCommand request, CancellationToken cancellationToken)
         {
-            var merchIssues = _merchIssueRepository.GetAll();
-
-            return await Task.FromResult(merchIssues);
+            return await _merchIssueRepository.GetAll(cancellationToken);
         }
     }
 }

@@ -7,8 +7,8 @@
     public abstract class Entity
     {
         int? _requestedHashCode;
-        int _Id;
-        public virtual int Id
+        long _Id;
+        public virtual long Id
         {
             get
             {

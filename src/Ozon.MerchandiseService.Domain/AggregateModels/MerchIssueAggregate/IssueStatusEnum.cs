@@ -1,4 +1,7 @@
-﻿using Ozon.MerchandiseService.Domain.SeedWork;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Ozon.MerchandiseService.Domain.Exceptions;
+using Ozon.MerchandiseService.Domain.SeedWork;
 
 namespace Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate
 {
@@ -11,6 +14,20 @@ namespace Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate
 
         public IssueStatusEnum(int id, string name) : base(id, name)
         {
+        }
+        
+        public static IEnumerable<IssueStatusEnum> List() =>
+            new[] { IsCreated, InQueue, IsPending, IsIssued };
+        public static IssueStatusEnum From(int id)
+        {
+            var state = List().SingleOrDefault(s => s.Id == id);
+
+            if (state == null)
+            {
+                throw new MerchandiseDomainException($"Нет указанного статуса");
+            }
+
+            return state;
         }
     }
 }
