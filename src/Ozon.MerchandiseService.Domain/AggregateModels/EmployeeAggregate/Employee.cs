@@ -10,13 +10,22 @@ namespace Ozon.MerchandiseService.Domain.AggregateModels.EmployeeAggregate
 {
     public class Employee: Entity
     {
-        private static int _employeesCount = 1;
         public long EmployeeId { get; private set; }
         
         public Employee(long employeeId)
         {
-            Id = _employeesCount++;
             EmployeeId = employeeId;
+        }
+
+        public Employee(long id, long employeeId)
+        {
+            Id = id;
+            EmployeeId = employeeId;
+        }
+
+        public void SetId(long id)
+        {
+            Id = id;
         }
     }
 }

@@ -11,19 +11,22 @@ namespace Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate
 {
     public class MerchIssue : Entity, IAggregateRoot
     {
-        private static int _merchIssuesCount = 1;
         
         public  long EmployeeId => _employeeId;
         private long _employeeId;
 
         public IReadOnlyCollection<MerchIssueItem> MerchIssueItems => _merchIssueItems;
-        private readonly List<MerchIssueItem> _merchIssueItems;
+        private List<MerchIssueItem> _merchIssueItems;
         
         public MerchIssue(long employeeId)
         {
-            Id = _merchIssuesCount++;
             _employeeId = employeeId;
             _merchIssueItems = new List<MerchIssueItem>();
+        }
+        public MerchIssue(long employeeId, List<MerchIssueItem> items)
+        {
+            _employeeId = employeeId;
+            _merchIssueItems = items;
         }
         
         public void AddMerchIssueItem(MerchType merchPackType, DateTime dateCreated)
@@ -82,6 +85,10 @@ namespace Ozon.MerchandiseService.Domain.AggregateModels.MerchIssueAggregate
             return merchIssueItem;
         }
 
+        public void SetItems(List<MerchIssueItem> items)
+        {
+            _merchIssueItems = items;
+        }
         #region DomainEvents
 
         private void AddMerchIssueItemChangedToPendingDomainEvent(MerchType merchType)
